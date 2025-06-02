@@ -18,7 +18,7 @@ import { Label } from "@/components/ui/label";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Loader2, Mail, Lock } from "lucide-react";
 
-export default function LoginPage() {
+export function LoginPage() {
   const [formData, setFormData] = useState({
     identifier: "",
     password: "",
@@ -47,11 +47,9 @@ export default function LoginPage() {
       const data = await response.json();
 
       if (response.ok) {
-        // Salvar o token JWT no localStorage
         localStorage.setItem("token", data.jwt);
         localStorage.setItem("user", JSON.stringify(data.user));
-
-        // Redirecionar para o dashboard
+        document.cookie = `token=${data.jwt}; path=/`;
         router.push("/dashboard");
       } else {
         setError(data.error?.message || "Erro ao fazer login");
@@ -71,7 +69,7 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 flex items-center justify-center p-4">
+    <div className="min-h-screen flex items-center justify-center p-4 bg-gradient-to-br from-slate-50 to-slate-100">
       <Card className="w-full max-w-md">
         <CardHeader className="space-y-1">
           <CardTitle className="text-2xl font-bold text-center">
@@ -149,3 +147,5 @@ export default function LoginPage() {
     </div>
   );
 }
+
+export default LoginPage;
