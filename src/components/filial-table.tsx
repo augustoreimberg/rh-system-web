@@ -6,6 +6,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { Plus, Pencil, Trash2 } from "lucide-react"
 import { FilialModal } from "@/components/filial-modal"
 import { toast } from "sonner"
+import { getFiliais, deleteFilial } from "@/actions/filial-actions"
 
 interface Filial {
   id: number
@@ -14,19 +15,7 @@ interface Filial {
   createdAt: string
   updatedAt: string
   publishedAt: string
-  employes: []
-}
-
-interface ApiResponse {
-  data: Filial[]
-  meta: {
-    pagination: {
-      page: number
-      pageSize: number
-      pageCount: number
-      total: number
-    }
-  }
+  employes: any[]
 }
 
 export function FilialTable() {
@@ -38,17 +27,38 @@ export function FilialTable() {
   const fetchFiliais = async () => {
     try {
       setLoading(true)
-      const response = await fetch("http://10.30.10.81:1337/api/filials?populate=employes")
-      if (!response.ok) {
-        throw new Error("Erro ao buscar filiais")
+      const result = await getFiliais()
+
+      if (result.success && result.data) {
+        setFiliais(result.data)
+      } else {
+        toast.error(result.error || "Erro ao carregar filiais")
       }
-      const data: ApiResponse = await response.json()
-      setFiliais(data.data)
     } catch (error) {
       console.error("Erro ao buscar filiais:", error)
       toast.error("Erro ao carregar filiais")
     } finally {
       setLoading(false)
+    }
+  }
+
+  const handleDelete = async (filial: Filial) => {
+    if (!confirm("Tem certeza que deseja excluir esta filial?")) {
+      return
+    }
+
+    try {
+      const result = await deleteFilial(filial.documentId)
+
+      if (result.success) {
+        toast.success("Filial excluída com sucesso")
+        fetchFiliais()
+      } else {
+        toast.error(result.error || "Erro ao excluir filial")
+      }
+    } catch (error) {
+      console.error("Erro ao excluir filial:", error)
+      toast.error("Erro ao excluir filial")
     }
   }
 
@@ -84,9 +94,7 @@ export function FilialTable() {
     <div className="space-y-4">
       <div className="flex justify-between items-center">
         <div>
-          <h3 className="text-lg font-medium">
-            Total: {filiais.length}
-          </h3>
+          <h3 className="text-lg font-medium">Total: {filiais.length}</h3>
         </div>
         <Button onClick={handleCreate}>
           <Plus className="h-4 w-4 mr-2" />
@@ -106,7 +114,7 @@ export function FilialTable() {
           <TableBody>
             {filiais.length === 0 ? (
               <TableRow>
-                <TableCell colSpan={5} className="text-center py-8 text-muted-foreground">
+                <TableCell colSpan={3} className="text-center py-8 text-muted-foreground">
                   Nenhuma filial encontrada
                 </TableCell>
               </TableRow>
@@ -114,11 +122,14 @@ export function FilialTable() {
               filiais.map((filial) => (
                 <TableRow key={filial.id}>
                   <TableCell className="text-center">{filial.name}</TableCell>
-                  <TableCell className="text-center">{filial.employes.length}</TableCell>
+                  <TableCell className="text-center">{filial.employes?.length || 0}</TableCell>
                   <TableCell className="text-center">
-                    <div>
+                    <div className="flex justify-center gap-2">
                       <Button variant="outline" size="sm" onClick={() => handleEdit(filial)}>
                         <Pencil className="h-4 w-4" />
+                      </Button>
+                      <Button variant="outline" size="sm" onClick={() => handleDelete(filial)}>
+                        <Trash2 className="h-4 w-4" />
                       </Button>
                     </div>
                   </TableCell>

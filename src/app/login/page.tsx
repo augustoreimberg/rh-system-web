@@ -17,6 +17,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Loader2, Mail, Lock } from "lucide-react";
+import { toast } from "sonner";
 
 export function LoginPage() {
   const [formData, setFormData] = useState({
@@ -52,10 +53,10 @@ export function LoginPage() {
         document.cookie = `token=${data.jwt}; path=/`;
         router.push("/dashboard");
       } else {
-        setError(data.error?.message || "Erro ao fazer login");
+        toast.error("Erro ao fazer login");
       }
     } catch (err) {
-      setError("Erro de conexão. Tente novamente.");
+      toast.error("Erro de conexão. Tente novamente!");
     } finally {
       setIsLoading(false);
     }
@@ -81,14 +82,8 @@ export function LoginPage() {
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSubmit} className="space-y-4">
-            {error && (
-              <Alert variant="destructive">
-                <AlertDescription>{error}</AlertDescription>
-              </Alert>
-            )}
-
             <div className="space-y-2">
-              <Label htmlFor="identifier">Email ou Nome de Usuário</Label>
+              <Label htmlFor="identifier">Email</Label>
               <div className="relative">
                 <Mail className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
                 <Input
@@ -112,7 +107,7 @@ export function LoginPage() {
                   id="password"
                   name="password"
                   type="password"
-                  placeholder="••••••••"
+                  placeholder="•••••"
                   value={formData.password}
                   onChange={handleChange}
                   className="pl-10"

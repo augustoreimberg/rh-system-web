@@ -16,6 +16,7 @@ import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import * as z from "zod"
 import { toast } from "sonner"
+import { createFilial, updateFilial } from "@/actions/filial-actions"
 
 const formSchema = z.object({
   name: z.string().min(1, "Nome é obrigatório"),
@@ -65,30 +66,19 @@ export function FilialModal({ open, onClose, filial }: FilialModalProps) {
     try {
       setLoading(true)
 
-      const payload = {
-        data: {
-          name: data.name
-        },
+      let result
+      if (isEditing) {
+        result = await updateFilial(filial.documentId, data.name)
+      } else {
+        result = await createFilial(data.name)
       }
 
-      const url = isEditing ? `http://10.30.10.81:1337/api/filials/${filial.documentId}` : "http://10.30.10.81:1337/api/filials"
-
-      const method = isEditing ? "PUT" : "POST"
-
-      const response = await fetch(url, {
-        method,
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(payload),
-      })
-
-      if (!response.ok) {
-        throw new Error(`Erro ao ${isEditing ? "atualizar" : "criar"} filial`)
+      if (result.success) {
+        toast.success(`Filial ${isEditing ? "atualizada" : "criada"} com sucesso`)
+        onClose()
+      } else {
+        toast.error(result.error || `Erro ao ${isEditing ? "atualizar" : "criar"} filial`)
       }
-
-      toast.success(`Filial ${isEditing ? "atualizada" : "criada"} com sucesso`)
-      onClose()
     } catch (error) {
       console.error("Erro:", error)
       toast.error(`Erro ao ${isEditing ? "atualizar" : "criar"} filial`)
