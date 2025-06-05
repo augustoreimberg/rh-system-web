@@ -1,21 +1,21 @@
-"use client"
+"use client";
 
-import type React from "react"
-import { useState } from "react"
-import Link from "next/link"
-import { useRouter } from "next/navigation"
-import { Button } from "@/components/ui/button"
+import type React from "react";
+import { useState } from "react";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { Alert, AlertDescription } from "@/components/ui/alert"
-import { Loader2, User, Mail, Lock } from "lucide-react"
+} from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Loader2, User, Mail, Lock } from "lucide-react";
 
 export function RegisterPage() {
   const [formData, setFormData] = useState({
@@ -23,20 +23,20 @@ export function RegisterPage() {
     email: "",
     password: "",
     confirmPassword: "",
-  })
-  const [isLoading, setIsLoading] = useState(false)
-  const [error, setError] = useState("")
-  const router = useRouter()
+  });
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState("");
+  const router = useRouter();
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    setIsLoading(true)
-    setError("")
+    e.preventDefault();
+    setIsLoading(true);
+    setError("");
 
     if (formData.password !== formData.confirmPassword) {
-      setError("As senhas não coincidem")
-      setIsLoading(false)
-      return
+      setError("As senhas não coincidem");
+      setIsLoading(false);
+      return;
     }
 
     try {
@@ -53,24 +53,24 @@ export function RegisterPage() {
             password: formData.password,
           }),
         }
-      )
+      );
 
-      const data = await response.json()
+      const data = await response.json();
 
       if (response.ok) {
-        localStorage.setItem("token", data.jwt)
-        localStorage.setItem("user", JSON.stringify(data.user))
-        document.cookie = `token=${data.jwt}; path=/`
-        router.push("/dashboard")
+        localStorage.setItem("token", data.jwt);
+        localStorage.setItem("user", JSON.stringify(data.user));
+        document.cookie = `token=${data.jwt}; path=/`;
+        router.push("/dashboard");
       } else {
-        setError(data.error?.message || "Erro ao criar conta")
+        setError(data.error?.message || "Erro ao criar conta");
       }
     } catch (err) {
-      setError("Erro de conexão. Tente novamente.")
+      setError("Erro de conexão. Tente novamente.");
     } finally {
-      setIsLoading(false)
+      setIsLoading(false);
     }
-  }
+  };
 
   return (
     <div className="min-h-screen flex items-center justify-center p-4 bg-gradient-to-br from-slate-50 to-slate-100">
@@ -155,7 +155,10 @@ export function RegisterPage() {
                   placeholder="••••••••"
                   value={formData.confirmPassword}
                   onChange={(e) =>
-                    setFormData({ ...formData, confirmPassword: e.target.value })
+                    setFormData({
+                      ...formData,
+                      confirmPassword: e.target.value,
+                    })
                   }
                   className="pl-10"
                   required
@@ -177,17 +180,14 @@ export function RegisterPage() {
 
           <div className="mt-6 text-center text-sm">
             Já tem uma conta?{" "}
-            <Link
-              href="/"
-              className="text-primary hover:underline font-medium"
-            >
+            <Link href="/" className="text-primary hover:underline font-medium">
               Fazer login
             </Link>
           </div>
         </CardContent>
       </Card>
     </div>
-  )
+  );
 }
 
-export default RegisterPage
+export default RegisterPage;

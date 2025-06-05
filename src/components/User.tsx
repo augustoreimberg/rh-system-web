@@ -1,42 +1,46 @@
-'use client'
+"use client";
 
-import { useState, useEffect } from 'react'
-import { getCurrentUser } from '@/actions/user'
-import { EditUserModal } from './EditUserModal'
+import { useState, useEffect } from "react";
+import { getCurrentUser } from "@/actions/user-actions";
+import { EditUserModal } from "./EditUserModal";
 
 export function User() {
-  const [user, setUser] = useState<{ username: string; email: string } | null>(null)
-  const [isLoading, setIsLoading] = useState(true)
-  const [isModalOpen, setIsModalOpen] = useState(false)
+  const [user, setUser] = useState<{ username: string; email: string } | null>(
+    null
+  );
+  const [isLoading, setIsLoading] = useState(true);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
     async function loadUser() {
       try {
-        const userData = await getCurrentUser()
-        setUser(userData)
+        const userData = await getCurrentUser();
+        setUser(userData);
       } catch (error) {
-        console.error('Erro ao carregar usuário:', error)
+        console.error("Erro ao carregar usuário:", error);
       } finally {
-        setIsLoading(false)
+        setIsLoading(false);
       }
     }
 
-    loadUser()
-  }, [])
+    loadUser();
+  }, []);
 
   if (isLoading) {
-    return <div>Carregando...</div>
+    return <div>Carregando...</div>;
   }
 
   if (!user) {
-    return <div>Erro ao carregar dados do usuário</div>
+    return <div>Erro ao carregar dados do usuário</div>;
   }
 
   return (
     <div className="bg-white shadow rounded-lg p-6">
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-xl font-semibold text-gray-900">{user.username}</h2>
+          <h2 className="text-xl font-semibold text-gray-900">
+            {user.username}
+          </h2>
           <p className="text-sm text-gray-500">{user.email}</p>
         </div>
         <button
@@ -52,9 +56,9 @@ export function User() {
         onClose={() => setIsModalOpen(false)}
         user={user}
         onSuccess={() => {
-          getCurrentUser().then(setUser)
+          getCurrentUser().then(setUser);
         }}
       />
     </div>
-  )
-} 
+  );
+}

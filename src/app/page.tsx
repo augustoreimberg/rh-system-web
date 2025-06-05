@@ -1,5 +1,5 @@
-import { LoginPage } from "@/app/login/page"
+import { LoginPage } from "@/app/login/page";
 
 export default function Page() {
-  return <LoginPage />
+  return <LoginPage />;
 }

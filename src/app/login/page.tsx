@@ -3,7 +3,6 @@
 import type React from "react";
 
 import { useState } from "react";
-import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import {
@@ -15,7 +14,6 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Loader2, Mail, Lock } from "lucide-react";
 import { toast } from "sonner";
 
@@ -127,16 +125,6 @@ export function LoginPage() {
               )}
             </Button>
           </form>
-
-          <div className="mt-6 text-center text-sm">
-            Não tem uma conta?{" "}
-            <Link
-              href="/register"
-              className="text-primary hover:underline font-medium"
-            >
-              Criar conta
-            </Link>
-          </div>
         </CardContent>
       </Card>
     </div>

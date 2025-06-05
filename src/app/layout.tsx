@@ -10,6 +10,7 @@ const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "RH System",
+  description: "Sistemas de gerenciamento",
 };
 
 export default function RootLayout({
@@ -20,8 +21,8 @@ export default function RootLayout({
   return (
     <html lang="pt-br">
       <body className={inter.className}>
-          <main>{children}</main>
-          <Toaster expand={false} />
+        <main>{children}</main>
+        <Toaster expand={false} />
       </body>
     </html>
   );

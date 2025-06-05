@@ -19,6 +19,7 @@ interface Employee {
     documentId: string;
     name: string;
   };
+  vacations: any[];
   payrolls: Array<{
     id: number;
     documentId: string;
@@ -34,26 +35,30 @@ interface Employee {
     totalPayable: number;
     paidAt: string | null;
     paymentDate: string;
-  }> | null;
+  }>;
 }
 
 interface ApiResponse {
   data: Employee[];
+  meta: {
+    pagination: {
+      page: number;
+      pageSize: number;
+      pageCount: number;
+      total: number;
+    };
+  };
 }
 
-export async function getEmployeesPayroll(
-  month: number,
-  year: number
-): Promise<Employee[]> {
+export async function getDashboardData(): Promise<Employee[]> {
   try {
     const response = await fetch(
-      `${process.env.NEXT_PUBLIC_STRAPI_URL}/api/employes/with-payrolls?month=${month}&year=${year}`,
+      `${process.env.NEXT_PUBLIC_STRAPI_URL}/api/employes?populate=*`,
       {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
         },
-        cache: "no-store",
       }
     );
 
@@ -64,7 +69,7 @@ export async function getEmployeesPayroll(
     const result: ApiResponse = await response.json();
     return result.data || [];
   } catch (error) {
-    console.error("Erro ao buscar funcionários com payroll:", error);
-    throw new Error("Falha ao carregar dados dos funcionários");
+    console.error("Erro ao buscar dados do dashboard:", error);
+    throw new Error("Falha ao carregar dados do dashboard");
   }
 }

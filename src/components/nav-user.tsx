@@ -26,7 +26,7 @@ import {
   useSidebar,
 } from "@/components/ui/sidebar"
 import { EditUserModal } from './EditUserModal'
-import { getCurrentUser } from '@/actions/user'
+import { getCurrentUser } from '@/actions/user-actions'
 
 export function NavUser() {
   const { isMobile } = useSidebar()

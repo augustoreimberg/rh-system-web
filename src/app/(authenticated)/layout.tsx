@@ -1,19 +1,18 @@
-"use client"
+"use client";
 
-import { AppSidebar } from "@/components/app-sidebar"
-import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar"
+import { AppHeader } from "@/components/app-header";
 
 export default function AuthenticatedLayout({
   children,
 }: {
-  children: React.ReactNode
+  children: React.ReactNode;
 }) {
   return (
-    <SidebarProvider>
-      <AppSidebar />
-      <SidebarInset>
+    <html lang="pt-br">
+      <body>
+        <AppHeader />
         {children}
-      </SidebarInset>
-    </SidebarProvider>
-  )
-} 
+      </body>
+    </html>
+  );
+}

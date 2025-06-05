@@ -89,3 +89,32 @@ export async function updatePayroll(documentId: string, data: UpdatePayrollData)
     throw new Error("Falha ao atualizar a folha de pagamento")
   }
 }
+
+export async function markAsPaid(documentId: string, paidAt: string): Promise<void> {
+  try {
+    const apiUrl = `${process.env.NEXT_PUBLIC_STRAPI_URL}/api/payrolls/${documentId}`
+
+    const response = await fetch(apiUrl, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        data: {
+          paidAt: paidAt,
+        },
+      }),
+    })
+
+    if (!response.ok) {
+      const errorData = await response.json()
+      console.error("Erro na API:", errorData)
+      throw new Error(`Erro ao marcar como pago: ${response.status}`)
+    }
+
+    return await response.json()
+  } catch (error) {
+    console.error("Erro ao marcar como pago:", error)
+    throw new Error("Falha ao marcar pagamento como realizado")
+  }
+}

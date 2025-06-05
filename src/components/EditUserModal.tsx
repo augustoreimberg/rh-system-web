@@ -1,51 +1,60 @@
-'use client'
+"use client";
 
-import { useState } from 'react'
-import { updateUser } from '@/actions/user'
+import { useState } from "react";
+import { updateUser } from "@/actions/user-actions";
 import {
   Dialog,
   DialogContent,
   DialogHeader,
   DialogTitle,
   DialogFooter,
-} from "@/components/ui/dialog"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { toast } from 'sonner'
+} from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { toast } from "sonner";
 
 interface EditUserModalProps {
-  isOpen: boolean
-  onClose: () => void
+  isOpen: boolean;
+  onClose: () => void;
   user: {
-    email: string
-  }
-  onSuccess: () => void
+    email: string;
+  };
+  onSuccess: () => void;
 }
 
-export function EditUserModal({ isOpen, onClose, user, onSuccess }: EditUserModalProps) {
+export function EditUserModal({
+  isOpen,
+  onClose,
+  user,
+  onSuccess,
+}: EditUserModalProps) {
   const [formData, setFormData] = useState({
     email: user.email,
-    password: '',
-    confirmPassword: '',
-  })
-  const [isLoading, setIsLoading] = useState(false)
+    password: "",
+    confirmPassword: "",
+  });
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    setIsLoading(true)
+    e.preventDefault();
+    setIsLoading(true);
 
     try {
-      await updateUser(formData)
-      toast.success("Seus dados foram atualizados com sucesso.")
-      onSuccess()
-      onClose()
+      await updateUser(formData);
+      toast.success("Seus dados foram atualizados com sucesso.");
+      onSuccess();
+      onClose();
     } catch (err) {
-      toast.error(err instanceof Error ? err.message : "Não foi possível atualizar seus dados.")
+      toast.error(
+        err instanceof Error
+          ? err.message
+          : "Não foi possível atualizar seus dados."
+      );
     } finally {
-      setIsLoading(false)
+      setIsLoading(false);
     }
-  }
+  };
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
@@ -61,7 +70,9 @@ export function EditUserModal({ isOpen, onClose, user, onSuccess }: EditUserModa
               id="email"
               type="email"
               value={formData.email}
-              onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+              onChange={(e) =>
+                setFormData({ ...formData, email: e.target.value })
+              }
               required
             />
           </div>
@@ -72,7 +83,9 @@ export function EditUserModal({ isOpen, onClose, user, onSuccess }: EditUserModa
               id="password"
               type="password"
               value={formData.password}
-              onChange={(e) => setFormData({ ...formData, password: e.target.value })}
+              onChange={(e) =>
+                setFormData({ ...formData, password: e.target.value })
+              }
             />
           </div>
 
@@ -82,7 +95,9 @@ export function EditUserModal({ isOpen, onClose, user, onSuccess }: EditUserModa
               id="confirmPassword"
               type="password"
               value={formData.confirmPassword}
-              onChange={(e) => setFormData({ ...formData, confirmPassword: e.target.value })}
+              onChange={(e) =>
+                setFormData({ ...formData, confirmPassword: e.target.value })
+              }
               disabled={!formData.password}
             />
           </div>
@@ -103,5 +118,5 @@ export function EditUserModal({ isOpen, onClose, user, onSuccess }: EditUserModa
         </form>
       </DialogContent>
     </Dialog>
-  )
-} 
+  );
+}
