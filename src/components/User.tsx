@@ -13,7 +13,6 @@ export function User() {
     async function loadUser() {
       try {
         const userData = await getCurrentUser()
-        console.log("USUARIO ->", userData)
         setUser(userData)
       } catch (error) {
         console.error('Erro ao carregar usuário:', error)

@@ -49,7 +49,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
     <Sidebar collapsible="icon" {...props}>
       <SidebarHeader>
         <div className="flex h-14 items-center px-4">
-          <span className="text-lg font-semibold">RH System</span>
+          <span className="text-lg font-semibold">RH</span>
         </div>
       </SidebarHeader>
       <SidebarContent>
