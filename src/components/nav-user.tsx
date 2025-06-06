@@ -30,7 +30,7 @@ import { getCurrentUser } from '@/actions/user-actions'
 export function NavUser() {
   const { isMobile } = useSidebar()
   const [isModalOpen, setIsModalOpen] = useState(false)
-  const [user, setUser] = useState<{ email: string } | null>(null)
+  const [user, setUser] = useState<{ id: number; email: string } | null>(null)
 
   useEffect(() => {
     async function loadUser() {

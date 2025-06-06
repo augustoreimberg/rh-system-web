@@ -5,7 +5,7 @@ import { getCurrentUser } from "@/actions/user-actions";
 import { EditUserModal } from "./EditUserModal";
 
 export function User() {
-  const [user, setUser] = useState<{ username: string; email: string } | null>(
+  const [user, setUser] = useState<{ id: number; username: string; email: string } | null>(
     null
   );
   const [isLoading, setIsLoading] = useState(true);

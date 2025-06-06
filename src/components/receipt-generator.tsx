@@ -73,6 +73,9 @@ export function generateReceipt({
   const marginLeft = 18;
   let y = 20;
 
+  doc.addImage("/assets/logo_black.png", "PNG", marginLeft, y, 30, 12);
+  y += 15;
+
   doc.setFont("helvetica", "bold");
   doc.setFontSize(13);
   doc.text("DEMONSTRATIVO DE PAGAMENTO", 105, y, { align: "center" });

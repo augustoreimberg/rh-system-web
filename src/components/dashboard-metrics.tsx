@@ -336,7 +336,7 @@ export function DashboardMetrics({ employees }: DashboardMetricsProps) {
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-2">
               <p className="text-sm text-muted-foreground">Total a Pagar</p>
-              <p className="text-2xl font-bold text-red-600">
+              <p className="text-2xl font-bold text-orange-600">
                 {formatCurrency(totalPayable)}
               </p>
             </div>
@@ -348,7 +348,7 @@ export function DashboardMetrics({ employees }: DashboardMetricsProps) {
             </div>
             <div className="space-y-2">
               <p className="text-sm text-muted-foreground">Pendente</p>
-              <p className="text-2xl font-bold text-orange-600">
+              <p className="text-2xl font-bold text-red-600">
                 {formatCurrency(totalPayable - totalPaid)}
               </p>
             </div>

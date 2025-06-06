@@ -47,7 +47,7 @@ const navItems = [
 
 export function AppHeader() {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [user, setUser] = useState<{ email: string } | null>(null);
+  const [user, setUser] = useState<{ id: number; email: string } | null>(null);
   const pathname = usePathname();
 
   useEffect(() => {
@@ -77,7 +77,7 @@ export function AppHeader() {
     <header className="sticky top-0 z-50 w-full border-b bg-background">
       <div className="flex h-16 items-center px-4">
         <div className="flex items-center gap-4">
-          <Logo />
+          <Logo width={100} height={50}/>
         </div>
         <nav className="hidden md:flex items-center justify-center flex-1">
           <div className="flex items-center space-x-4">

@@ -3,6 +3,7 @@
 import { cookies } from "next/headers";
 
 interface UpdateUserData {
+  id: number;
   email?: string;
   password?: string;
   confirmPassword?: string;
@@ -48,7 +49,7 @@ export async function updateUser(data: UpdateUserData) {
   }
 
   const response = await fetch(
-    `${process.env.NEXT_PUBLIC_STRAPI_URL}/api/users/me`,
+    `${process.env.NEXT_PUBLIC_STRAPI_URL}/api/users/${data.id}`,
     {
       method: "PUT",
       headers: {
