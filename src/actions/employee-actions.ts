@@ -125,8 +125,6 @@ export async function updateEmployee(
         body: JSON.stringify({
           data: {
             ...employeeData,
-            vacations: employeeData.vacations || [],
-            payrolls: employeeData.payrolls || [],
           },
         }),
       }

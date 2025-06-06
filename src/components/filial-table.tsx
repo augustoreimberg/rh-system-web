@@ -22,7 +22,23 @@ interface Filial {
   createdAt: string;
   updatedAt: string;
   publishedAt: string;
-  employes: any[];
+  employes: Employee[];
+}
+
+interface Employee {
+  id: number;
+  documentId: string;
+  name: string;
+  responsibility: string;
+  scale: string;
+  shift: string;
+  startDate: string;
+  endDate: string;
+  salary: number;
+  VC: number;
+  VT: number;
+  VR: number;
+  VA: number;
 }
 
 export function FilialTable() {

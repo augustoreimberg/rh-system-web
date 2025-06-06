@@ -19,6 +19,8 @@ import { getCurrentUser } from "@/actions/user-actions";
 import { EditUserModal } from "./EditUserModal";
 import { LogoutButton } from "@/components/logout-button";
 import { usePathname } from "next/navigation";
+import { ModeToggle } from "./ModeToggle";
+import { Logo } from "./logo";
 
 const navItems = [
   {
@@ -75,7 +77,7 @@ export function AppHeader() {
     <header className="sticky top-0 z-50 w-full border-b bg-background">
       <div className="flex h-16 items-center px-4">
         <div className="flex items-center gap-4">
-          <span className="text-lg font-semibold">RH System</span>
+          <Logo />
         </div>
         <nav className="hidden md:flex items-center justify-center flex-1">
           <div className="flex items-center space-x-4">
@@ -168,8 +170,11 @@ export function AppHeader() {
                 </svg>
                 <span>Editar Perfil</span>
               </DropdownMenuItem>
-              <DropdownMenuSeparator />
               <DropdownMenuItem asChild>
+                <ModeToggle />
+              </DropdownMenuItem>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem asChild className="w-full">
                 <LogoutButton />
               </DropdownMenuItem>
             </DropdownMenuContent>

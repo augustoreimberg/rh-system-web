@@ -8,6 +8,7 @@ interface PayrollData {
   quantityDayWork: number
   gratification: number
   paymentDate: string | null
+  createdDate: Date
 }
 
 interface UpdatePayrollData {
@@ -38,6 +39,7 @@ export async function createPayroll(data: PayrollData): Promise<void> {
           quantityDayWork: data.quantityDayWork,
           gratification: data.gratification,
           paymentDate: data.paymentDate,
+          createdDate: data.createdDate,
         },
       }),
     })

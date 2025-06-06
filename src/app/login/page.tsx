@@ -16,6 +16,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Loader2, Mail, Lock } from "lucide-react";
 import { toast } from "sonner";
+import { Logo } from "@/components/logo";
 
 export function LoginPage() {
   const [formData, setFormData] = useState({
@@ -23,13 +24,11 @@ export function LoginPage() {
     password: "",
   });
   const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState("");
   const router = useRouter();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
-    setError("");
 
     try {
       const response = await fetch(
@@ -54,6 +53,7 @@ export function LoginPage() {
         toast.error("Erro ao fazer login");
       }
     } catch (err) {
+      console.error(err);
       toast.error("Erro de conexão. Tente novamente!");
     } finally {
       setIsLoading(false);
@@ -68,11 +68,11 @@ export function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center p-4 bg-gradient-to-br from-slate-50 to-slate-100">
+    <div className="min-h-screen flex items-center justify-center p-4">
       <Card className="w-full max-w-md">
         <CardHeader className="space-y-1">
           <CardTitle className="text-2xl font-bold text-center">
-            Login
+            <Logo width={200} height={200} className="mx-auto" />
           </CardTitle>
           <CardDescription className="text-center">
             Entre com seu email e senha para acessar sua conta

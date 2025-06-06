@@ -64,10 +64,6 @@ export default function DashboardPage() {
     fetchData();
   }, []);
 
-  const handleRefresh = () => {
-    fetchData();
-  };
-
   if (loading) {
     return (
       <div className="p-8">

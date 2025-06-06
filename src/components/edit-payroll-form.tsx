@@ -73,8 +73,6 @@ export function EditPayrollForm({
   employee,
   payroll,
   onSuccess,
-  month,
-  year,
 }: EditPayrollFormProps) {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -310,10 +308,10 @@ export function EditPayrollForm({
             {isSubmitting ? (
               <>
                 <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                Atualizando...
+                Gerando...
               </>
             ) : (
-              "Atualizar"
+              "Gerar"
             )}
           </Button>
         </div>

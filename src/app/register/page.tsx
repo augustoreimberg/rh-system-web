@@ -17,7 +17,7 @@ import { Label } from "@/components/ui/label";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Loader2, User, Mail, Lock } from "lucide-react";
 
-export function RegisterPage() {
+export default function RegisterPage() {
   const [formData, setFormData] = useState({
     username: "",
     email: "",
@@ -66,6 +66,7 @@ export function RegisterPage() {
         setError(data.error?.message || "Erro ao criar conta");
       }
     } catch (err) {
+      console.error("Erro ao criar conta:", err);
       setError("Erro de conexão. Tente novamente.");
     } finally {
       setIsLoading(false);
@@ -189,5 +190,3 @@ export function RegisterPage() {
     </div>
   );
 }
-
-export default RegisterPage;

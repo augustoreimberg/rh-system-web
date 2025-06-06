@@ -8,11 +8,9 @@ export default function AuthenticatedLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="pt-br">
-      <body>
-        <AppHeader />
-        {children}
-      </body>
-    </html>
+    <>
+      <AppHeader />
+      {children}
+    </>
   );
 }

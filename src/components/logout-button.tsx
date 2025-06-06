@@ -23,6 +23,7 @@ export function LogoutButton() {
       router.push("/");
       router.refresh();
     } catch (error) {
+      console.error("Erro ao fazer logout:", error);
       toast.error("Falha ao fazer logout");
     } finally {
       setIsLoading(false);
@@ -31,12 +32,12 @@ export function LogoutButton() {
 
   return (
     <Button
-      variant="outline"
+      variant="ghost"
       onClick={handleLogout}
       disabled={isLoading}
-      className="flex items-center gap-2"
+      className="w-full justify-start"
     >
-      <LogOut className="h-4 w-4" />
+      <LogOut className="mr-2 h-4 w-4" />
       {isLoading ? "Saindo..." : "Sair"}
     </Button>
   );

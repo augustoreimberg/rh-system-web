@@ -32,6 +32,7 @@ export const isAuthenticated = (): boolean => {
 
     return decoded.exp > currentTime;
   } catch (error) {
+    console.error("Error decoding token:", error);
     return false;
   }
 };

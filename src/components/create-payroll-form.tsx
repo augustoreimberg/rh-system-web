@@ -70,7 +70,7 @@ export function CreatePayrollForm({
       quantityVR: 0,
       quantityVT: 0,
       quantityVC: 0,
-      quantityDayWork: 22, 
+      quantityDayWork: 22,
       gratification: 0,
       paymentDate: null,
     },
@@ -85,6 +85,8 @@ export function CreatePayrollForm({
         ? format(values.paymentDate, "yyyy-MM-dd")
         : null;
 
+      const createdDate = new Date(year, month - 1, 1);
+
       await createPayroll({
         employe: employee.documentId,
         quantityVR: values.quantityVR,
@@ -93,6 +95,7 @@ export function CreatePayrollForm({
         quantityDayWork: values.quantityDayWork,
         gratification: values.gratification,
         paymentDate,
+        createdDate,
       });
 
       onSuccess();
@@ -245,10 +248,10 @@ export function CreatePayrollForm({
             {isSubmitting ? (
               <>
                 <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                Salvando...
+                Gerando...
               </>
             ) : (
-              "Salvar"
+              "Gerar"
             )}
           </Button>
         </div>

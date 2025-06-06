@@ -97,11 +97,6 @@ export function DashboardMetrics({ employees }: DashboardMetricsProps) {
     return acc;
   }, {} as Record<string, number>);
 
-  const averageSalary =
-    employees.reduce((acc, emp) => acc + emp.salary, 0) / totalEmployees;
-  const averageBenefits =
-    employees.reduce((acc, emp) => acc + emp.VC + emp.VT + emp.VR + emp.VA, 0) /
-    totalEmployees;
   const paidPercentage =
     employeesWithPayroll > 0 ? (paidPayrolls / employeesWithPayroll) * 100 : 0;
 

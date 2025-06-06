@@ -310,7 +310,7 @@ export function PayrollTable({
                           </TableCell>
                           <TableCell>
                             {hasPayroll && payroll.paidAt ? (
-                              <Badge variant="default">
+                              <Badge variant="default" className="bg-green-600">
                                 {formatDate(payroll.paidAt)}
                               </Badge>
                             ) : hasPayroll ? (

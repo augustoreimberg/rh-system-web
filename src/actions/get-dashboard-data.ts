@@ -19,7 +19,6 @@ interface Employee {
     documentId: string;
     name: string;
   };
-  vacations: any[];
   payrolls: Array<{
     id: number;
     documentId: string;
