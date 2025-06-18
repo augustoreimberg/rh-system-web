@@ -52,6 +52,7 @@ const formSchema = z.object({
     .min(0, "Deve ser maior ou igual a 0")
     .max(31, "Máximo de 31 dias"),
   gratification: z.coerce.number().min(0, "Deve ser maior ou igual a 0"),
+  discount: z.coerce.number().min(0, "Deve ser maior ou igual a 0"),
   paymentDate: z.date().nullable(),
 });
 
@@ -72,6 +73,7 @@ export function CreatePayrollForm({
       quantityVC: 0,
       quantityDayWork: 22,
       gratification: 0,
+      discount: 0,
       paymentDate: null,
     },
   });
@@ -94,6 +96,7 @@ export function CreatePayrollForm({
         quantityVC: values.quantityVC,
         quantityDayWork: values.quantityDayWork,
         gratification: values.gratification,
+        discount: values.discount,
         paymentDate,
         createdDate,
       });
@@ -138,7 +141,7 @@ export function CreatePayrollForm({
               <FormItem>
                 <FormLabel>Gratificação (R$)</FormLabel>
                 <FormControl>
-                  <Input type="number" step="0.01" {...field} />
+                  <Input type="number" {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -182,7 +185,20 @@ export function CreatePayrollForm({
               <FormItem>
                 <FormLabel>Qtd. VC</FormLabel>
                 <FormControl>
-                  <Input type="number" {...field} />
+                  <Input type="number"  {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="discount"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Disconto</FormLabel>
+                <FormControl>
+                  <Input type="number"  {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>

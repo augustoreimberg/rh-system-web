@@ -7,6 +7,7 @@ interface PayrollData {
   quantityVC: number
   quantityDayWork: number
   gratification: number
+  discount: number
   paymentDate: string | null
   createdDate: Date
 }
@@ -19,6 +20,7 @@ interface UpdatePayrollData {
   gratification: number
   paidAt: string | null
   paymentDate: string | null
+  discount: number
 }
 
 export async function createPayroll(data: PayrollData): Promise<void> {
@@ -40,6 +42,7 @@ export async function createPayroll(data: PayrollData): Promise<void> {
           gratification: data.gratification,
           paymentDate: data.paymentDate,
           createdDate: data.createdDate,
+          discount: data.discount 
         },
       }),
     })
@@ -73,6 +76,7 @@ export async function updatePayroll(documentId: string, data: UpdatePayrollData)
           quantityVC: data.quantityVC,
           quantityDayWork: data.quantityDayWork,
           gratification: data.gratification,
+          discount: data.discount,
           paidAt: data.paidAt,
           paymentDate: data.paymentDate,
         },

@@ -26,6 +26,7 @@ interface Payroll {
   mealVoucher: number;
   foodVoucher: number;
   gratification: number;
+  discount: number;
   totalPayable: number;
   paidAt: string | null;
   paymentDate: string;
@@ -56,6 +57,11 @@ const monthNames = [
 function printCurrency(val?: number) {
   if (!val || isNaN(val) || val === 0) return "R$ -";
   return `R$ ${val.toFixed(2).replace(".", ",")}`;
+}
+
+function negativePrintCurrency(val?: number) {
+  if (!val || isNaN(val) || val === 0) return "R$ -";
+  return `R$ -${val.toFixed(2).replace(".", ",")}`;
 }
 
 export function generateReceipt({
@@ -188,6 +194,10 @@ export function generateReceipt({
   doc.text("AD PONT / PREST", marginLeft, y);
   doc.text(printCurrency(payroll.gratification), marginLeft + 55, y);
   doc.text("C. C", marginLeft + 95, y);
+  y += 7;
+
+  doc.text("DESCONTOS", marginLeft, y);
+  doc.text(negativePrintCurrency(payroll.discount), marginLeft + 55, y);
   y += 7;
 
   doc.setFont("helvetica", "bold");

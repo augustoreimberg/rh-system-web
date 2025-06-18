@@ -59,6 +59,7 @@ interface Employee {
     foodVoucher: number;
     gratification: number;
     totalPayable: number;
+    discount: number;
     paidAt: string | null;
     paymentDate: string;
   }> | null;
@@ -226,6 +227,7 @@ export function PayrollTable({
                       <TableHead>Vale Refeição</TableHead>
                       <TableHead>Vale Alimentação</TableHead>
                       <TableHead>Gratificação</TableHead>
+                      <TableHead>Descontos</TableHead>
                       <TableHead>Total a Pagar</TableHead>
                       <TableHead>Data Pagamento</TableHead>
                       <TableHead>Status</TableHead>
@@ -298,6 +300,11 @@ export function PayrollTable({
                           <TableCell>
                             {hasPayroll
                               ? formatCurrency(payroll.gratification)
+                              : "-"}
+                          </TableCell>
+                          <TableCell>
+                            {hasPayroll
+                              ? formatCurrency(payroll.discount)
                               : "-"}
                           </TableCell>
                           <TableCell className="font-semibold">

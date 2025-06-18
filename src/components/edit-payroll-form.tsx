@@ -44,6 +44,7 @@ interface Payroll {
   quantityVC: number;
   quantityDayWork: number;
   gratification: number;
+  discount: number;
   paidAt: string | null;
   paymentDate: string;
 }
@@ -65,6 +66,7 @@ const formSchema = z.object({
     .min(0, "Deve ser maior ou igual a 0")
     .max(31, "Máximo de 31 dias"),
   gratification: z.coerce.number().min(0, "Deve ser maior ou igual a 0"),
+  discount: z.coerce.number().min(0, "Deve ser maior ou igual a 0"),
   paymentDate: z.date().nullable(),
   paidAt: z.date().nullable(),
 });
@@ -90,6 +92,7 @@ export function EditPayrollForm({
       quantityVC: payroll.quantityVC,
       quantityDayWork: payroll.quantityDayWork,
       gratification: payroll.gratification,
+      discount: payroll.discount,
       paymentDate: paymentDate,
       paidAt: paidAt,
     },
@@ -111,6 +114,7 @@ export function EditPayrollForm({
         quantityVC: values.quantityVC,
         quantityDayWork: values.quantityDayWork,
         gratification: values.gratification,
+        discount: values.discount,
         paidAt,
         paymentDate,
       });
@@ -155,7 +159,7 @@ export function EditPayrollForm({
               <FormItem>
                 <FormLabel>Gratificação (R$)</FormLabel>
                 <FormControl>
-                  <Input type="number" step="0.01" {...field} />
+                  <Input type="number" placeholder="R$ 0,00"{...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -198,6 +202,19 @@ export function EditPayrollForm({
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Qtd. VC</FormLabel>
+                <FormControl>
+                  <Input type="number" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="discount"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Desconto</FormLabel>
                 <FormControl>
                   <Input type="number" {...field} />
                 </FormControl>
