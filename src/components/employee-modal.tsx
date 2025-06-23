@@ -1,7 +1,7 @@
-"use client";
+"use client"
 
-import { useState, useEffect } from "react";
-import { Button } from "@/components/ui/button";
+import { useState, useEffect } from "react"
+import { Button } from "@/components/ui/button"
 import {
   Dialog,
   DialogContent,
@@ -9,34 +9,42 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from "@/components/ui/dialog";
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import * as z from "zod";
-import { toast } from "sonner";
-import {
-  createEmployee,
-  updateEmployee,
-  type Employee,
-  type CreateEmployeeData,
-} from "@/actions/employee-actions";
-import { getFiliais } from "@/actions/filial-actions";
+} from "@/components/ui/dialog"
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
+import { Input } from "@/components/ui/input"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { useForm } from "react-hook-form"
+import { zodResolver } from "@hookform/resolvers/zod"
+import * as z from "zod"
+import { toast } from "sonner"
+import { createEmployee, updateEmployee, type Employee, type CreateEmployeeData } from "@/actions/employee-actions"
+import { getFiliais } from "@/actions/filial-actions"
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip"
+import { Info } from "lucide-react"
+
+// Função para formatar valor como moeda brasileira
+const formatCurrency = (value: string): string => {
+  // Remove tudo que não é dígito
+  const numericValue = value.replace(/\D/g, "")
+
+  if (!numericValue) return ""
+
+  // Converte para número e divide por 100 para ter os centavos
+  const number = Number.parseInt(numericValue) / 100
+
+  // Formata como moeda brasileira
+  return new Intl.NumberFormat("pt-BR", {
+    style: "currency",
+    currency: "BRL",
+  }).format(number)
+}
+
+// Função para extrair apenas o valor numérico
+const extractNumericValue = (formattedValue: string): string => {
+  const numericValue = formattedValue.replace(/\D/g, "")
+  if (!numericValue) return ""
+  return (Number.parseInt(numericValue) / 100).toString()
+}
 
 const formSchema = z.object({
   name: z.string().min(1, "Nome é obrigatório"),
@@ -51,25 +59,25 @@ const formSchema = z.object({
   VT: z.string().optional(),
   VR: z.string().optional(),
   VA: z.string().optional(),
-});
+})
 
-type FormData = z.infer<typeof formSchema>;
+type FormData = z.infer<typeof formSchema>
 
 interface Filial {
-  id: number;
-  name: string;
+  id: number
+  name: string
 }
 
 interface EmployeeModalProps {
-  open: boolean;
-  onClose: () => void;
-  employee?: Employee | null;
+  open: boolean
+  onClose: () => void
+  employee?: Employee | null
 }
 
 export function EmployeeModal({ open, onClose, employee }: EmployeeModalProps) {
-  const [loading, setLoading] = useState(false);
-  const [filiais, setFiliais] = useState<Filial[]>([]);
-  const isEditing = !!employee;
+  const [loading, setLoading] = useState(false)
+  const [filiais, setFiliais] = useState<Filial[]>([])
+  const isEditing = !!employee
 
   const form = useForm<FormData>({
     resolver: zodResolver(formSchema),
@@ -87,24 +95,24 @@ export function EmployeeModal({ open, onClose, employee }: EmployeeModalProps) {
       VR: "",
       VA: "",
     },
-  });
+  })
 
   const fetchFiliais = async () => {
     try {
-      const result = await getFiliais();
+      const result = await getFiliais()
       if (result.success && result.data) {
-        setFiliais(result.data);
+        setFiliais(result.data)
       }
     } catch (error) {
-      console.error("Erro ao buscar filiais:", error);
+      console.error("Erro ao buscar filiais:", error)
     }
-  };
+  }
 
   useEffect(() => {
     if (open) {
-      fetchFiliais();
+      fetchFiliais()
     }
-  }, [open]);
+  }, [open])
 
   useEffect(() => {
     if (employee) {
@@ -121,7 +129,7 @@ export function EmployeeModal({ open, onClose, employee }: EmployeeModalProps) {
         VT: employee.VT?.toString() || "",
         VR: employee.VR?.toString() || "",
         VA: employee.VA?.toString() || "",
-      });
+      })
     } else {
       form.reset({
         name: "",
@@ -136,13 +144,13 @@ export function EmployeeModal({ open, onClose, employee }: EmployeeModalProps) {
         VT: "",
         VR: "",
         VA: "",
-      });
+      })
     }
-  }, [employee, form]);
+  }, [employee, form])
 
   const onSubmit = async (data: FormData) => {
     try {
-      setLoading(true);
+      setLoading(true)
 
       const employeeData: CreateEmployeeData = {
         name: data.name,
@@ -151,291 +159,433 @@ export function EmployeeModal({ open, onClose, employee }: EmployeeModalProps) {
         shift: data.shift,
         filial: Number.parseInt(data.filial),
         startDate: new Date(data.startDate).toISOString(),
-        endDate: data.endDate
-          ? new Date(data.endDate).toISOString()
-          : new Date().toISOString(),
+        endDate: data.endDate ? new Date(data.endDate).toISOString() : new Date().toISOString(),
         salary: Number.parseFloat(data.salary) || 0,
         VC: data.VC !== undefined ? Number.parseFloat(data.VC) || 0 : 0,
         VT: data.VT !== undefined ? Number.parseFloat(data.VT) || 0 : 0,
         VR: data.VR !== undefined ? Number.parseFloat(data.VR) || 0 : 0,
         VA: data.VA !== undefined ? Number.parseFloat(data.VA) || 0 : 0,
-      };
+      }
 
-      let result;
+      let result
       if (isEditing) {
-        result = await updateEmployee(employee.documentId, employeeData);
+        result = await updateEmployee(employee.documentId, employeeData)
       } else {
-        result = await createEmployee(employeeData);
+        result = await createEmployee(employeeData)
       }
 
       if (result.success) {
-        toast.success(
-          `Funcionário ${isEditing ? "atualizado" : "criado"} com sucesso`
-        );
-        onClose();
+        toast.success(`Funcionário ${isEditing ? "atualizado" : "criado"} com sucesso`)
+        onClose()
       } else {
-        toast.error(
-          result.error ||
-            `Erro ao ${isEditing ? "atualizar" : "criar"} funcionário`
-        );
+        toast.error(result.error || `Erro ao ${isEditing ? "atualizar" : "criar"} funcionário`)
       }
     } catch (error) {
-      console.error("Erro:", error);
-      toast.error(`Erro ao ${isEditing ? "atualizar" : "criar"} funcionário`);
+      console.error("Erro:", error)
+      toast.error(`Erro ao ${isEditing ? "atualizar" : "criar"} funcionário`)
     } finally {
-      setLoading(false);
+      setLoading(false)
     }
-  };
+  }
 
   const handleClose = () => {
-    form.reset();
-    onClose();
-  };
+    form.reset()
+    onClose()
+  }
 
   return (
-    <Dialog open={open} onOpenChange={handleClose}>
-      <DialogContent className="sm:max-w-[600px] max-h-[80vh] overflow-y-auto">
-        <DialogHeader>
-          <DialogTitle>
-            {isEditing ? "Editar Funcionário" : "Novo Funcionário"}
-          </DialogTitle>
-          <DialogDescription>
-            {isEditing
-              ? "Edite as informações do funcionário abaixo."
-              : "Preencha as informações para criar um novo funcionário."}
-          </DialogDescription>
-        </DialogHeader>
+    <TooltipProvider>
+      <Dialog open={open} onOpenChange={handleClose}>
+        <DialogContent className="sm:max-w-[600px] max-h-[80vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle>{isEditing ? "Editar Funcionário" : "Novo Funcionário"}</DialogTitle>
+            <DialogDescription>
+              {isEditing
+                ? "Edite as informações do funcionário abaixo."
+                : "Preencha as informações para criar um novo funcionário."}
+            </DialogDescription>
+          </DialogHeader>
 
-        <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-            <div className="grid grid-cols-2 gap-4">
-              <FormField
-                control={form.control}
-                name="name"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Nome</FormLabel>
-                    <FormControl>
-                      <Input placeholder="Nome do funcionário" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
-              <FormField
-                control={form.control}
-                name="responsibility"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Cargo</FormLabel>
-                    <FormControl>
-                      <Input placeholder="Cargo do funcionário" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
-              <FormField
-                control={form.control}
-                name="filial"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Filial</FormLabel>
-                    <Select
-                      onValueChange={field.onChange}
-                      defaultValue={field.value}
-                    >
+          <Form {...form}>
+            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+              <div className="grid grid-cols-2 gap-4">
+                <FormField
+                  control={form.control}
+                  name="name"
+                  render={({ field }) => (
+                    <FormItem>
+                      <div className="flex items-center gap-1">
+                        <FormLabel>Nome</FormLabel>
+                        <Tooltip>
+                          <TooltipTrigger asChild>
+                            <Info className="h-4 w-4 text-muted-foreground cursor-help" />
+                          </TooltipTrigger>
+                          <TooltipContent>
+                            <p>Nome completo do funcionário</p>
+                          </TooltipContent>
+                        </Tooltip>
+                      </div>
                       <FormControl>
-                        <SelectTrigger>
-                          <SelectValue placeholder="Selecione uma filial" />
-                        </SelectTrigger>
+                        <Input placeholder="Nome do funcionário" {...field} />
                       </FormControl>
-                      <SelectContent>
-                        {filiais.map((filial) => (
-                          <SelectItem
-                            key={filial.id}
-                            value={filial.id.toString()}
-                          >
-                            {filial.name}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
 
-              <FormField
-                control={form.control}
-                name="scale"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Escala</FormLabel>
-                    <FormControl>
-                      <Input placeholder="Escala de trabalho" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+                <FormField
+                  control={form.control}
+                  name="responsibility"
+                  render={({ field }) => (
+                    <FormItem>
+                      <div className="flex items-center gap-1">
+                        <FormLabel>Cargo</FormLabel>
+                        <Tooltip>
+                          <TooltipTrigger asChild>
+                            <Info className="h-4 w-4 text-muted-foreground cursor-help" />
+                          </TooltipTrigger>
+                          <TooltipContent>
+                            <p>Função ou cargo exercido pelo funcionário</p>
+                          </TooltipContent>
+                        </Tooltip>
+                      </div>
+                      <FormControl>
+                        <Input placeholder="Cargo do funcionário" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
 
-              <FormField
-                control={form.control}
-                name="shift"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Turno</FormLabel>
-                    <FormControl>
-                      <Input placeholder="Turno de trabalho" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+                <FormField
+                  control={form.control}
+                  name="filial"
+                  render={({ field }) => (
+                    <FormItem>
+                      <div className="flex items-center gap-1">
+                        <FormLabel>Filial</FormLabel>
+                        <Tooltip>
+                          <TooltipTrigger asChild>
+                            <Info className="h-4 w-4 text-muted-foreground cursor-help" />
+                          </TooltipTrigger>
+                          <TooltipContent>
+                            <p>Unidade/filial onde o funcionário trabalha</p>
+                          </TooltipContent>
+                        </Tooltip>
+                      </div>
+                      <Select onValueChange={field.onChange} defaultValue={field.value}>
+                        <FormControl>
+                          <SelectTrigger>
+                            <SelectValue placeholder="Selecione uma filial" />
+                          </SelectTrigger>
+                        </FormControl>
+                        <SelectContent>
+                          {filiais.map((filial) => (
+                            <SelectItem key={filial.id} value={filial.id.toString()}>
+                              {filial.name}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
 
-              <FormField
-                control={form.control}
-                name="salary"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Salário</FormLabel>
-                    <FormControl>
-                      <Input
-                        type="number"
-                        step="0.01"
-                        placeholder="0.00"
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+                <FormField
+                  control={form.control}
+                  name="scale"
+                  render={({ field }) => (
+                    <FormItem>
+                      <div className="flex items-center gap-1">
+                        <FormLabel>Escala</FormLabel>
+                        <Tooltip>
+                          <TooltipTrigger asChild>
+                            <Info className="h-4 w-4 text-muted-foreground cursor-help" />
+                          </TooltipTrigger>
+                          <TooltipContent>
+                            <p>Escala de trabalho (ex: 6x1, 5x2, etc.)</p>
+                          </TooltipContent>
+                        </Tooltip>
+                      </div>
+                      <FormControl>
+                        <Input placeholder="Escala de trabalho" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
 
-              <FormField
-                control={form.control}
-                name="startDate"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Data de Início</FormLabel>
-                    <FormControl>
-                      <Input type="date" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+                <FormField
+                  control={form.control}
+                  name="shift"
+                  render={({ field }) => (
+                    <FormItem>
+                      <div className="flex items-center gap-1">
+                        <FormLabel>Turno</FormLabel>
+                        <Tooltip>
+                          <TooltipTrigger asChild>
+                            <Info className="h-4 w-4 text-muted-foreground cursor-help" />
+                          </TooltipTrigger>
+                          <TooltipContent>
+                            <p>Turno de trabalho (manhã, tarde, noite)</p>
+                          </TooltipContent>
+                        </Tooltip>
+                      </div>
+                      <FormControl>
+                        <Input placeholder="Turno de trabalho" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
 
-              <FormField
-                control={form.control}
-                name="endDate"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Data de Fim (Opcional)</FormLabel>
-                    <FormControl>
-                      <Input type="date" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+                <FormField
+                  control={form.control}
+                  name="salary"
+                  render={({ field }) => (
+                    <FormItem>
+                      <div className="flex items-center gap-1">
+                        <FormLabel>Salário</FormLabel>
+                        <Tooltip>
+                          <TooltipTrigger asChild>
+                            <Info className="h-4 w-4 text-muted-foreground cursor-help" />
+                          </TooltipTrigger>
+                          <TooltipContent>
+                            <p>Salário base mensal do funcionário</p>
+                          </TooltipContent>
+                        </Tooltip>
+                      </div>
+                      <FormControl>
+                        <Input
+                          type="text"
+                          placeholder="R$ 0,00"
+                          value={formatCurrency(field.value)}
+                          onChange={(e) => {
+                            const inputValue = e.target.value
+                            if (inputValue === "" || inputValue === "R$ " || inputValue === "R$") {
+                              field.onChange("")
+                              return
+                            }
+                            const numericValue = extractNumericValue(inputValue)
+                            field.onChange(numericValue)
+                          }}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
 
-              <FormField
-                control={form.control}
-                name="VC"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Vale Combustível</FormLabel>
-                    <FormControl>
-                      <Input
-                        type="number"
-                        step="0.01"
-                        placeholder="0.00"
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+                <FormField
+                  control={form.control}
+                  name="startDate"
+                  render={({ field }) => (
+                    <FormItem>
+                      <div className="flex items-center gap-1">
+                        <FormLabel>Data de Início</FormLabel>
+                        <Tooltip>
+                          <TooltipTrigger asChild>
+                            <Info className="h-4 w-4 text-muted-foreground cursor-help" />
+                          </TooltipTrigger>
+                          <TooltipContent>
+                            <p>Data de início do funcionário na empresa</p>
+                          </TooltipContent>
+                        </Tooltip>
+                      </div>
+                      <FormControl>
+                        <Input type="date" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
 
-              <FormField
-                control={form.control}
-                name="VT"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Vale Transporte</FormLabel>
-                    <FormControl>
-                      <Input
-                        type="number"
-                        step="0.01"
-                        placeholder="0.00"
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+                <FormField
+                  control={form.control}
+                  name="endDate"
+                  render={({ field }) => (
+                    <FormItem>
+                      <div className="flex items-center gap-1">
+                        <FormLabel>Data de Fim (Opcional)</FormLabel>
+                        <Tooltip>
+                          <TooltipTrigger asChild>
+                            <Info className="h-4 w-4 text-muted-foreground cursor-help" />
+                          </TooltipTrigger>
+                          <TooltipContent>
+                            <p>Data de desligamento (deixe vazio se ainda ativo)</p>
+                          </TooltipContent>
+                        </Tooltip>
+                      </div>
+                      <FormControl>
+                        <Input type="date" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
 
-              <FormField
-                control={form.control}
-                name="VR"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Vale Refeição</FormLabel>
-                    <FormControl>
-                      <Input
-                        type="number"
-                        step="0.01"
-                        placeholder="0.00"
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+                <FormField
+                  control={form.control}
+                  name="VC"
+                  render={({ field }) => (
+                    <FormItem>
+                      <div className="flex items-center gap-1">
+                        <FormLabel>Vale Combustível</FormLabel>
+                        <Tooltip>
+                          <TooltipTrigger asChild>
+                            <Info className="h-4 w-4 text-muted-foreground cursor-help" />
+                          </TooltipTrigger>
+                          <TooltipContent>
+                            <p>Valor mensal do vale combustível</p>
+                          </TooltipContent>
+                        </Tooltip>
+                      </div>
+                      <FormControl>
+                        <Input
+                          type="text"
+                          placeholder="R$ 0,00"
+                          value={formatCurrency(field.value || "")}
+                          onChange={(e) => {
+                            const inputValue = e.target.value
+                            if (inputValue === "" || inputValue === "R$ " || inputValue === "R$") {
+                              field.onChange("")
+                              return
+                            }
+                            const numericValue = extractNumericValue(inputValue)
+                            field.onChange(numericValue)
+                          }}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
 
-              <FormField
-                control={form.control}
-                name="VA"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Vale Alimentação</FormLabel>
-                    <FormControl>
-                      <Input
-                        type="number"
-                        step="0.01"
-                        placeholder="0.00"
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            </div>
+                <FormField
+                  control={form.control}
+                  name="VT"
+                  render={({ field }) => (
+                    <FormItem>
+                      <div className="flex items-center gap-1">
+                        <FormLabel>Vale Transporte</FormLabel>
+                        <Tooltip>
+                          <TooltipTrigger asChild>
+                            <Info className="h-4 w-4 text-muted-foreground cursor-help" />
+                          </TooltipTrigger>
+                          <TooltipContent>
+                            <p>Valor mensal do vale transporte</p>
+                          </TooltipContent>
+                        </Tooltip>
+                      </div>
+                      <FormControl>
+                        <Input
+                          type="text"
+                          placeholder="R$ 0,00"
+                          value={formatCurrency(field.value || "")}
+                          onChange={(e) => {
+                            const inputValue = e.target.value
+                            if (inputValue === "" || inputValue === "R$ " || inputValue === "R$") {
+                              field.onChange("")
+                              return
+                            }
+                            const numericValue = extractNumericValue(inputValue)
+                            field.onChange(numericValue)
+                          }}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
 
-            <DialogFooter>
-              <Button
-                type="button"
-                variant="outline"
-                onClick={handleClose}
-                disabled={loading}
-              >
-                Cancelar
-              </Button>
-              <Button type="submit" disabled={loading}>
-                {loading ? "Salvando..." : isEditing ? "Atualizar" : "Criar"}
-              </Button>
-            </DialogFooter>
-          </form>
-        </Form>
-      </DialogContent>
-    </Dialog>
-  );
+                <FormField
+                  control={form.control}
+                  name="VR"
+                  render={({ field }) => (
+                    <FormItem>
+                      <div className="flex items-center gap-1">
+                        <FormLabel>Vale Refeição</FormLabel>
+                        <Tooltip>
+                          <TooltipTrigger asChild>
+                            <Info className="h-4 w-4 text-muted-foreground cursor-help" />
+                          </TooltipTrigger>
+                          <TooltipContent>
+                            <p>Valor mensal do vale refeição</p>
+                          </TooltipContent>
+                        </Tooltip>
+                      </div>
+                      <FormControl>
+                        <Input
+                          type="text"
+                          placeholder="R$ 0,00"
+                          value={formatCurrency(field.value || "")}
+                          onChange={(e) => {
+                            const inputValue = e.target.value
+                            if (inputValue === "" || inputValue === "R$ " || inputValue === "R$") {
+                              field.onChange("")
+                              return
+                            }
+                            const numericValue = extractNumericValue(inputValue)
+                            field.onChange(numericValue)
+                          }}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                <FormField
+                  control={form.control}
+                  name="VA"
+                  render={({ field }) => (
+                    <FormItem>
+                      <div className="flex items-center gap-1">
+                        <FormLabel>Vale Alimentação</FormLabel>
+                        <Tooltip>
+                          <TooltipTrigger asChild>
+                            <Info className="h-4 w-4 text-muted-foreground cursor-help" />
+                          </TooltipTrigger>
+                          <TooltipContent>
+                            <p>Valor mensal do vale alimentação</p>
+                          </TooltipContent>
+                        </Tooltip>
+                      </div>
+                      <FormControl>
+                        <Input
+                          type="text"
+                          placeholder="R$ 0,00"
+                          value={formatCurrency(field.value || "")}
+                          onChange={(e) => {
+                            const inputValue = e.target.value
+                            if (inputValue === "" || inputValue === "R$ " || inputValue === "R$") {
+                              field.onChange("")
+                              return
+                            }
+                            const numericValue = extractNumericValue(inputValue)
+                            field.onChange(numericValue)
+                          }}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+
+              <DialogFooter>
+                <Button type="button" variant="outline" onClick={handleClose} disabled={loading}>
+                  Cancelar
+                </Button>
+                <Button type="submit" disabled={loading}>
+                  {loading ? "Salvando..." : isEditing ? "Atualizar" : "Criar"}
+                </Button>
+              </DialogFooter>
+            </form>
+          </Form>
+        </DialogContent>
+      </Dialog>
+    </TooltipProvider>
+  )
 }
