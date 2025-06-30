@@ -5,43 +5,7 @@ import { ChevronLeft, ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { PayrollTable } from "@/components/payroll-table";
 import { getEmployeesPayroll } from "@/actions/get-employees-payroll";
-
-interface Employee {
-  id: number;
-  documentId: string;
-  name: string;
-  responsibility: string;
-  scale: string;
-  shift: string;
-  startDate: string;
-  endDate: string;
-  salary: number;
-  VC: number;
-  VT: number;
-  VR: number;
-  VA: number;
-  filial: {
-    id: number;
-    documentId: string;
-    name: string;
-  };
-  payrolls: Array<{
-    id: number;
-    documentId: string;
-    quantityVR: number;
-    quantityVT: number;
-    quantityVC: number;
-    quantityDayWork: number;
-    fuelVoucher: number;
-    transportationVoucher: number;
-    mealVoucher: number;
-    foodVoucher: number;
-    gratification: number;
-    totalPayable: number;
-    paidAt: string | null;
-    paymentDate: string;
-  }> | null;
-}
+import type { Employee } from "@/components/payroll-table";
 
 const monthNames = [
   "Janeiro",
@@ -70,7 +34,16 @@ export default function FolhaPagamentoPage() {
     setLoading(true);
     try {
       const data = await getEmployeesPayroll(month, year);
-      setEmployees(data);
+      const fixedData = data.map((employee) => ({
+        ...employee,
+        payrolls: employee.payrolls
+          ? employee.payrolls.map((payroll) => ({
+              ...payroll,
+              discount: payroll.discount ?? 0,
+            }))
+          : null,
+      }));
+      setEmployees(fixedData);
     } catch (error) {
       console.error("Erro ao buscar funcionários:", error);
       setEmployees([]);

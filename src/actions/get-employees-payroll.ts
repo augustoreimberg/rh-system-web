@@ -32,6 +32,7 @@ interface Employee {
     foodVoucher: number;
     gratification: number;
     totalPayable: number;
+    discount: number;
     paidAt: string | null;
     paymentDate: string;
   }> | null;

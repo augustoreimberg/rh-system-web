@@ -27,7 +27,7 @@ import { EditPayrollForm } from "./edit-payroll-form";
 import { MarkAsPaidModal } from "./mark-as-paid-modal";
 import { generateReceipt } from "./receipt-generator";
 
-interface Employee {
+export interface Employee {
   id: number;
   documentId: string;
   name: string;
