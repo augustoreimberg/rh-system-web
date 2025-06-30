@@ -69,6 +69,19 @@ const extractNumericValue = (formattedValue: string): string => {
     return (Number.parseInt(numericValue) / 100).toString();
 };
 
+function parseDecimalString(value: string): number {
+    if (!value) return 0;
+    return Number.parseFloat(value.replace(",", ".")) || 0;
+}
+
+function formatCurrencyInput(value: string): string {
+    // Remove tudo que não é dígito
+    const numeric = value.replace(/\D/g, "");
+    if (!numeric) return "";
+    const number = (parseInt(numeric, 10) / 100).toFixed(2);
+    return number.replace(".", ",");
+}
+
 const formSchema = z.object({
     name: z.string().min(1, "Nome é obrigatório"),
     responsibility: z.string().min(1, "Cargo é obrigatório"),
@@ -188,10 +201,10 @@ export function EmployeeModal({ open, onClose, employee }: EmployeeModalProps) {
                     ? new Date(data.endDate).toISOString()
                     : new Date().toISOString(),
                 salary: Number.parseFloat(data.salary) || 0,
-                VC: data.VC !== undefined ? Number.parseFloat(data.VC) || 0 : 0,
-                VT: data.VT !== undefined ? Number.parseFloat(data.VT) || 0 : 0,
-                VR: data.VR !== undefined ? Number.parseFloat(data.VR) || 0 : 0,
-                VA: data.VA !== undefined ? Number.parseFloat(data.VA) || 0 : 0,
+                VC: parseDecimalString(formatCurrencyInput(data.VC)),
+                VT: parseDecimalString(formatCurrencyInput(data.VT)),
+                VR: parseDecimalString(formatCurrencyInput(data.VR)),
+                VA: parseDecimalString(formatCurrencyInput(data.VA)),
             };
 
             let result;
@@ -562,7 +575,21 @@ export function EmployeeModal({ open, onClose, employee }: EmployeeModalProps) {
                                                 <Input
                                                     type="text"
                                                     placeholder="R$ 0,00"
-                                                    {...field}
+                                                    value={
+                                                        field.value
+                                                            ? `R$ ${formatCurrencyInput(
+                                                                  field.value
+                                                              )}`
+                                                            : ""
+                                                    }
+                                                    onChange={(e) => {
+                                                        const raw =
+                                                            e.target.value.replace(
+                                                                /\D/g,
+                                                                ""
+                                                            );
+                                                        field.onChange(raw);
+                                                    }}
                                                 />
                                             </FormControl>
                                             <FormMessage />
@@ -595,7 +622,21 @@ export function EmployeeModal({ open, onClose, employee }: EmployeeModalProps) {
                                                 <Input
                                                     type="text"
                                                     placeholder="R$ 0,00"
-                                                    {...field}
+                                                    value={
+                                                        field.value
+                                                            ? `R$ ${formatCurrencyInput(
+                                                                  field.value
+                                                              )}`
+                                                            : ""
+                                                    }
+                                                    onChange={(e) => {
+                                                        const raw =
+                                                            e.target.value.replace(
+                                                                /\D/g,
+                                                                ""
+                                                            );
+                                                        field.onChange(raw);
+                                                    }}
                                                 />
                                             </FormControl>
                                             <FormMessage />
@@ -628,7 +669,21 @@ export function EmployeeModal({ open, onClose, employee }: EmployeeModalProps) {
                                                 <Input
                                                     type="text"
                                                     placeholder="R$ 0,00"
-                                                    {...field}
+                                                    value={
+                                                        field.value
+                                                            ? `R$ ${formatCurrencyInput(
+                                                                  field.value
+                                                              )}`
+                                                            : ""
+                                                    }
+                                                    onChange={(e) => {
+                                                        const raw =
+                                                            e.target.value.replace(
+                                                                /\D/g,
+                                                                ""
+                                                            );
+                                                        field.onChange(raw);
+                                                    }}
                                                 />
                                             </FormControl>
                                             <FormMessage />
@@ -661,7 +716,21 @@ export function EmployeeModal({ open, onClose, employee }: EmployeeModalProps) {
                                                 <Input
                                                     type="text"
                                                     placeholder="R$ 0,00"
-                                                    {...field}
+                                                    value={
+                                                        field.value
+                                                            ? `R$ ${formatCurrencyInput(
+                                                                  field.value
+                                                              )}`
+                                                            : ""
+                                                    }
+                                                    onChange={(e) => {
+                                                        const raw =
+                                                            e.target.value.replace(
+                                                                /\D/g,
+                                                                ""
+                                                            );
+                                                        field.onChange(raw);
+                                                    }}
                                                 />
                                             </FormControl>
                                             <FormMessage />
