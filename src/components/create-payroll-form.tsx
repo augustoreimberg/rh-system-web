@@ -184,19 +184,8 @@ export function CreatePayrollForm({
                                 <FormControl>
                                     <Input
                                         type="text"
-                                        min={0}
                                         inputMode="decimal"
                                         {...field}
-                                        onChange={(e) => {
-                                            const value =
-                                                e.target.value.replace(
-                                                    ",",
-                                                    "."
-                                                );
-                                            field.onChange(
-                                                value === "" ? 0 : Number(value)
-                                            );
-                                        }}
                                     />
                                 </FormControl>
                                 <FormMessage />
@@ -213,19 +202,8 @@ export function CreatePayrollForm({
                                 <FormControl>
                                     <Input
                                         type="text"
-                                        min={0}
                                         inputMode="decimal"
                                         {...field}
-                                        onChange={(e) => {
-                                            const value =
-                                                e.target.value.replace(
-                                                    ",",
-                                                    "."
-                                                );
-                                            field.onChange(
-                                                value === "" ? 0 : Number(value)
-                                            );
-                                        }}
                                     />
                                 </FormControl>
                                 <FormMessage />
@@ -242,19 +220,8 @@ export function CreatePayrollForm({
                                 <FormControl>
                                     <Input
                                         type="text"
-                                        min={0}
                                         inputMode="decimal"
                                         {...field}
-                                        onChange={(e) => {
-                                            const value =
-                                                e.target.value.replace(
-                                                    ",",
-                                                    "."
-                                                );
-                                            field.onChange(
-                                                value === "" ? 0 : Number(value)
-                                            );
-                                        }}
                                     />
                                 </FormControl>
                                 <FormMessage />
