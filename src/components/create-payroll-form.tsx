@@ -71,7 +71,7 @@ export function CreatePayrollForm({
             quantityVR: 0,
             quantityVT: 0,
             quantityVC: 0,
-            quantityDayWork: 22,
+            quantityDayWork: 20,
             gratification: 0,
             discount: 0,
             paymentDate: null,
@@ -130,7 +130,18 @@ export function CreatePayrollForm({
                             <FormItem>
                                 <FormLabel>Dias Trabalhados</FormLabel>
                                 <FormControl>
-                                    <Input type="number" {...field} />
+                                    <Input
+                                        type="number"
+                                        min={0}
+                                        {...field}
+                                        onChange={(e) =>
+                                            field.onChange(
+                                                e.target.value === ""
+                                                    ? 0
+                                                    : Number(e.target.value)
+                                            )
+                                        }
+                                    />
                                 </FormControl>
                                 <FormMessage />
                             </FormItem>
@@ -144,7 +155,18 @@ export function CreatePayrollForm({
                             <FormItem>
                                 <FormLabel>Gratificação (R$)</FormLabel>
                                 <FormControl>
-                                    <Input type="number" {...field} />
+                                    <Input
+                                        type="number"
+                                        min={0}
+                                        {...field}
+                                        onChange={(e) =>
+                                            field.onChange(
+                                                e.target.value === ""
+                                                    ? 0
+                                                    : Number(e.target.value)
+                                            )
+                                        }
+                                    />
                                 </FormControl>
                                 <FormMessage />
                             </FormItem>
@@ -161,16 +183,20 @@ export function CreatePayrollForm({
                                 <FormLabel>Qtd. VR</FormLabel>
                                 <FormControl>
                                     <Input
-                                        type="number"
+                                        type="text"
                                         min={0}
+                                        inputMode="decimal"
                                         {...field}
-                                        onChange={(e) =>
+                                        onChange={(e) => {
+                                            const value =
+                                                e.target.value.replace(
+                                                    ",",
+                                                    "."
+                                                );
                                             field.onChange(
-                                                e.target.value === ""
-                                                    ? 0
-                                                    : Number(e.target.value)
-                                            )
-                                        }
+                                                value === "" ? 0 : Number(value)
+                                            );
+                                        }}
                                     />
                                 </FormControl>
                                 <FormMessage />
@@ -186,16 +212,20 @@ export function CreatePayrollForm({
                                 <FormLabel>Qtd. VT</FormLabel>
                                 <FormControl>
                                     <Input
-                                        type="number"
+                                        type="text"
                                         min={0}
+                                        inputMode="decimal"
                                         {...field}
-                                        onChange={(e) =>
+                                        onChange={(e) => {
+                                            const value =
+                                                e.target.value.replace(
+                                                    ",",
+                                                    "."
+                                                );
                                             field.onChange(
-                                                e.target.value === ""
-                                                    ? 0
-                                                    : Number(e.target.value)
-                                            )
-                                        }
+                                                value === "" ? 0 : Number(value)
+                                            );
+                                        }}
                                     />
                                 </FormControl>
                                 <FormMessage />
@@ -211,16 +241,20 @@ export function CreatePayrollForm({
                                 <FormLabel>Qtd. VC</FormLabel>
                                 <FormControl>
                                     <Input
-                                        type="number"
+                                        type="text"
                                         min={0}
+                                        inputMode="decimal"
                                         {...field}
-                                        onChange={(e) =>
+                                        onChange={(e) => {
+                                            const value =
+                                                e.target.value.replace(
+                                                    ",",
+                                                    "."
+                                                );
                                             field.onChange(
-                                                e.target.value === ""
-                                                    ? 0
-                                                    : Number(e.target.value)
-                                            )
-                                        }
+                                                value === "" ? 0 : Number(value)
+                                            );
+                                        }}
                                     />
                                 </FormControl>
                                 <FormMessage />
@@ -234,7 +268,18 @@ export function CreatePayrollForm({
                             <FormItem>
                                 <FormLabel>Desconto</FormLabel>
                                 <FormControl>
-                                    <Input type="number" {...field} />
+                                    <Input
+                                        type="number"
+                                        min={0}
+                                        {...field}
+                                        onChange={(e) =>
+                                            field.onChange(
+                                                e.target.value === ""
+                                                    ? 0
+                                                    : Number(e.target.value)
+                                            )
+                                        }
+                                    />
                                 </FormControl>
                                 <FormMessage />
                             </FormItem>
