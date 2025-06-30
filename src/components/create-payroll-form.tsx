@@ -56,6 +56,18 @@ const formSchema = z.object({
     paymentDate: z.date().nullable(),
 });
 
+function formatCurrencyInput(value: string): string {
+    const numeric = value.replace(/\D/g, "");
+    if (!numeric) return "";
+    const number = (parseInt(numeric, 10) / 100).toFixed(2);
+    return number.replace(".", ",");
+}
+
+function parseDecimalString(value: string): number {
+    if (!value) return 0;
+    return Number.parseFloat(value.replace(",", ".")) || 0;
+}
+
 export function CreatePayrollForm({
     employee,
     onSuccess,
@@ -96,7 +108,9 @@ export function CreatePayrollForm({
                 quantityVC: values.quantityVC,
                 quantityDayWork: values.quantityDayWork,
                 gratification: values.gratification,
-                discount: values.discount,
+                discount: parseDecimalString(
+                    formatCurrencyInput(values.discount?.toString() ?? "")
+                ),
                 paymentDate,
                 createdDate,
             });
@@ -236,16 +250,18 @@ export function CreatePayrollForm({
                                 <FormLabel>Desconto</FormLabel>
                                 <FormControl>
                                     <Input
-                                        type="number"
-                                        min={0}
-                                        {...field}
-                                        onChange={(e) =>
-                                            field.onChange(
-                                                e.target.value === ""
-                                                    ? 0
-                                                    : Number(e.target.value)
-                                            )
-                                        }
+                                        type="text"
+                                        placeholder="R$ 0,00"
+                                        value={`R$ ${formatCurrencyInput(
+                                            field.value?.toString() ?? ""
+                                        )}`}
+                                        onChange={(e) => {
+                                            const raw = e.target.value.replace(
+                                                /\D/g,
+                                                ""
+                                            );
+                                            field.onChange(raw);
+                                        }}
                                     />
                                 </FormControl>
                                 <FormMessage />
