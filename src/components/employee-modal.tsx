@@ -201,10 +201,10 @@ export function EmployeeModal({ open, onClose, employee }: EmployeeModalProps) {
                     ? new Date(data.endDate).toISOString()
                     : new Date().toISOString(),
                 salary: Number.parseFloat(data.salary) || 0,
-                VC: parseDecimalString(formatCurrencyInput(data.VC)),
-                VT: parseDecimalString(formatCurrencyInput(data.VT)),
-                VR: parseDecimalString(formatCurrencyInput(data.VR)),
-                VA: parseDecimalString(formatCurrencyInput(data.VA)),
+                VC: parseDecimalString(formatCurrencyInput(data.VC ?? "")),
+                VT: parseDecimalString(formatCurrencyInput(data.VT ?? "")),
+                VR: parseDecimalString(formatCurrencyInput(data.VR ?? "")),
+                VA: parseDecimalString(formatCurrencyInput(data.VA ?? "")),
             };
 
             let result;
@@ -575,13 +575,9 @@ export function EmployeeModal({ open, onClose, employee }: EmployeeModalProps) {
                                                 <Input
                                                     type="text"
                                                     placeholder="R$ 0,00"
-                                                    value={
-                                                        field.value
-                                                            ? `R$ ${formatCurrencyInput(
-                                                                  field.value
-                                                              )}`
-                                                            : ""
-                                                    }
+                                                    value={`R$ ${formatCurrencyInput(
+                                                        field.value ?? ""
+                                                    )}`}
                                                     onChange={(e) => {
                                                         const raw =
                                                             e.target.value.replace(
@@ -622,13 +618,9 @@ export function EmployeeModal({ open, onClose, employee }: EmployeeModalProps) {
                                                 <Input
                                                     type="text"
                                                     placeholder="R$ 0,00"
-                                                    value={
-                                                        field.value
-                                                            ? `R$ ${formatCurrencyInput(
-                                                                  field.value
-                                                              )}`
-                                                            : ""
-                                                    }
+                                                    value={`R$ ${formatCurrencyInput(
+                                                        field.value ?? ""
+                                                    )}`}
                                                     onChange={(e) => {
                                                         const raw =
                                                             e.target.value.replace(
@@ -669,13 +661,9 @@ export function EmployeeModal({ open, onClose, employee }: EmployeeModalProps) {
                                                 <Input
                                                     type="text"
                                                     placeholder="R$ 0,00"
-                                                    value={
-                                                        field.value
-                                                            ? `R$ ${formatCurrencyInput(
-                                                                  field.value
-                                                              )}`
-                                                            : ""
-                                                    }
+                                                    value={`R$ ${formatCurrencyInput(
+                                                        field.value ?? ""
+                                                    )}`}
                                                     onChange={(e) => {
                                                         const raw =
                                                             e.target.value.replace(
@@ -716,13 +704,9 @@ export function EmployeeModal({ open, onClose, employee }: EmployeeModalProps) {
                                                 <Input
                                                     type="text"
                                                     placeholder="R$ 0,00"
-                                                    value={
-                                                        field.value
-                                                            ? `R$ ${formatCurrencyInput(
-                                                                  field.value
-                                                              )}`
-                                                            : ""
-                                                    }
+                                                    value={`R$ ${formatCurrencyInput(
+                                                        field.value ?? ""
+                                                    )}`}
                                                     onChange={(e) => {
                                                         const raw =
                                                             e.target.value.replace(
