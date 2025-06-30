@@ -356,8 +356,11 @@ export function EmployeeModal({ open, onClose, employee }: EmployeeModalProps) {
                                                 defaultValue={field.value}
                                             >
                                                 <FormControl>
-                                                    <SelectTrigger>
-                                                        <SelectValue placeholder="Selecione uma filial" />
+                                                    <SelectTrigger className="w-full min-w-[200px] max-w-full">
+                                                        <SelectValue
+                                                            placeholder="Selecione uma filial"
+                                                            className="truncate"
+                                                        />
                                                     </SelectTrigger>
                                                 </FormControl>
                                                 <SelectContent>
@@ -365,6 +368,7 @@ export function EmployeeModal({ open, onClose, employee }: EmployeeModalProps) {
                                                         <SelectItem
                                                             key={filial.id}
                                                             value={filial.id.toString()}
+                                                            className="truncate max-w-[300px]"
                                                         >
                                                             {filial.name}
                                                         </SelectItem>
