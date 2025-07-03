@@ -163,10 +163,22 @@ export function EmployeeModal({ open, onClose, employee }: EmployeeModalProps) {
                     : "",
                 endDate: employee.endDate ? employee.endDate.split("T")[0] : "",
                 salary: employee.salary?.toString() || "",
-                VC: employee.VC?.toString() || "",
-                VT: employee.VT?.toString() || "",
-                VR: employee.VR?.toString() || "",
-                VA: employee.VA?.toString() || "",
+                VC:
+                    employee.VC !== undefined && employee.VC !== null
+                        ? Math.round(Number(employee.VC) * 100).toString()
+                        : "",
+                VT:
+                    employee.VT !== undefined && employee.VT !== null
+                        ? Math.round(Number(employee.VT) * 100).toString()
+                        : "",
+                VR:
+                    employee.VR !== undefined && employee.VR !== null
+                        ? Math.round(Number(employee.VR) * 100).toString()
+                        : "",
+                VA:
+                    employee.VA !== undefined && employee.VA !== null
+                        ? Math.round(Number(employee.VA) * 100).toString()
+                        : "",
             });
         } else {
             form.reset({
