@@ -2,7 +2,7 @@
 
 import type React from "react";
 
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import {
     Table,
     TableBody,
@@ -88,6 +88,15 @@ export function PayrollTable({
     const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
     const [isMarkAsPaidModalOpen, setIsMarkAsPaidModalOpen] = useState(false);
 
+    const tableContainerRef = useRef<HTMLDivElement>(null);
+    const lastScrollTop = useRef<number>(0);
+
+    useEffect(() => {
+        if (tableContainerRef.current) {
+            tableContainerRef.current.scrollTop = lastScrollTop.current;
+        }
+    }, [employees]);
+
     const formatCurrency = (value: number) => {
         return new Intl.NumberFormat("pt-BR", {
             style: "currency",
@@ -167,16 +176,19 @@ export function PayrollTable({
     };
 
     const handleCreateSuccess = () => {
+        lastScrollTop.current = tableContainerRef.current?.scrollTop ?? 0;
         setIsCreateDialogOpen(false);
         onRefresh();
     };
 
     const handleEditSuccess = () => {
+        lastScrollTop.current = tableContainerRef.current?.scrollTop ?? 0;
         setIsEditDialogOpen(false);
         onRefresh();
     };
 
     const handleMarkAsPaidSuccess = () => {
+        lastScrollTop.current = tableContainerRef.current?.scrollTop ?? 0;
         setIsMarkAsPaidModalOpen(false);
         onRefresh();
     };
@@ -244,7 +256,10 @@ export function PayrollTable({
                                     Download folhas
                                 </Button>
                             </div>
-                            <div className="overflow-x-auto">
+                            <div
+                                ref={tableContainerRef}
+                                className="overflow-x-auto"
+                            >
                                 <Table>
                                     <TableHeader>
                                         <TableRow>
