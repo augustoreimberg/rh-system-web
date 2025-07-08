@@ -15,6 +15,10 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { createPayroll } from "@/actions/payroll-actions";
+import {
+    getEmployeesPayroll,
+    Employee as FullEmployee,
+} from "@/actions/get-employees-payroll";
 import { CalendarIcon, Loader2 } from "lucide-react";
 import { Calendar } from "@/components/ui/calendar";
 import {
@@ -26,19 +30,12 @@ import { cn } from "@/lib/utils";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
 
-interface Employee {
-    id: number;
-    documentId: string;
-    name: string;
-    VC: number;
-    VT: number;
-    VR: number;
-    VA: number;
-}
+// Usa o tipo Employee completo para garantir compatibilidade
+type Employee = FullEmployee;
 
 interface CreatePayrollFormProps {
     employee: Employee;
-    onSuccess: () => void;
+    onSuccess: (updatedEmployee?: Employee) => void;
     month: number;
     year: number;
 }
@@ -115,7 +112,12 @@ export function CreatePayrollForm({
                 createdDate,
             });
 
-            onSuccess();
+            // Buscar o funcionário atualizado
+            const allEmployees = await getEmployeesPayroll(month, year);
+            const updatedEmployee = allEmployees.find(
+                (e) => e.id === employee.id
+            );
+            onSuccess(updatedEmployee);
         } catch (err) {
             console.error("Erro ao criar folha de pagamento:", err);
             setError(

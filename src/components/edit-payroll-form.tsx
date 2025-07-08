@@ -25,16 +25,13 @@ import {
 import { cn } from "@/lib/utils";
 import { format, parseISO } from "date-fns";
 import { ptBR } from "date-fns/locale";
+import {
+    getEmployeesPayroll,
+    Employee as FullEmployee,
+} from "@/actions/get-employees-payroll";
 
-interface Employee {
-    id: number;
-    documentId: string;
-    name: string;
-    VC: number;
-    VT: number;
-    VR: number;
-    VA: number;
-}
+// Usa o tipo Employee completo para garantir compatibilidade
+type Employee = FullEmployee;
 
 interface Payroll {
     id: number;
@@ -52,7 +49,7 @@ interface Payroll {
 interface EditPayrollFormProps {
     employee: Employee;
     payroll: Payroll;
-    onSuccess: () => void;
+    onSuccess: (updatedEmployee?: Employee) => void;
     month: number;
     year: number;
 }
@@ -75,6 +72,8 @@ export function EditPayrollForm({
     employee,
     payroll,
     onSuccess,
+    month,
+    year,
 }: EditPayrollFormProps) {
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [error, setError] = useState<string | null>(null);
@@ -121,7 +120,12 @@ export function EditPayrollForm({
                 paymentDate,
             });
 
-            onSuccess();
+            // Buscar o funcionário atualizado
+            const allEmployees = await getEmployeesPayroll(month, year);
+            const updatedEmployee = allEmployees.find(
+                (e) => e.id === employee.id
+            );
+            onSuccess(updatedEmployee);
         } catch (err) {
             console.error("Erro ao atualizar folha de pagamento:", err);
             setError(
