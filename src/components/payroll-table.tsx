@@ -71,6 +71,7 @@ interface PayrollTableProps {
     onRefresh: () => void;
     currentMonth: number;
     currentYear: number;
+    onUpdateEmployee?: (updatedEmployee: Employee) => void;
 }
 
 export function PayrollTable({
@@ -79,6 +80,7 @@ export function PayrollTable({
     onRefresh,
     currentMonth,
     currentYear,
+    onUpdateEmployee,
 }: PayrollTableProps) {
     const [selectedEmployee, setSelectedEmployee] = useState<Employee | null>(
         null
@@ -90,6 +92,12 @@ export function PayrollTable({
 
     const tableContainerRef = useRef<HTMLDivElement>(null);
     const lastScrollTop = useRef<number>(0);
+
+    useEffect(() => {
+        if (!loading && employees.length > 0 && tableContainerRef.current) {
+            tableContainerRef.current.scrollTop = lastScrollTop.current;
+        }
+    }, [loading, employees]);
 
     useEffect(() => {
         if (tableContainerRef.current) {
@@ -175,16 +183,25 @@ export function PayrollTable({
         }
     };
 
-    const handleCreateSuccess = () => {
+    const handleCreateSuccess = async (updatedEmployee?: Employee) => {
         lastScrollTop.current = tableContainerRef.current?.scrollTop ?? 0;
         setIsCreateDialogOpen(false);
-        onRefresh();
+        if (updatedEmployee && onUpdateEmployee) {
+            onUpdateEmployee(updatedEmployee);
+        } else {
+            onRefresh();
+        }
     };
+    
 
-    const handleEditSuccess = () => {
+    const handleEditSuccess = async (updatedEmployee?: Employee) => {
         lastScrollTop.current = tableContainerRef.current?.scrollTop ?? 0;
         setIsEditDialogOpen(false);
-        onRefresh();
+        if (updatedEmployee && onUpdateEmployee) {
+            onUpdateEmployee(updatedEmployee);
+        } else {
+            onRefresh();
+        }
     };
 
     const handleMarkAsPaidSuccess = () => {
@@ -258,6 +275,7 @@ export function PayrollTable({
                             </div>
                             <div
                                 ref={tableContainerRef}
+                                key="payroll-table-container"
                                 className="overflow-x-auto"
                             >
                                 <Table>
@@ -656,7 +674,7 @@ export function PayrollTable({
             >
                 <DialogContent className="sm:max-w-md">
                     <DialogHeader>
-                        <DialogTitle>Criar Folha de Pagamento</DialogTitle>
+                        <DialogTitle>Criar Folha de Pagament</DialogTitle>
                     </DialogHeader>
                     {selectedEmployee && (
                         <CreatePayrollForm
