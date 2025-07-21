@@ -90,7 +90,7 @@ const formSchema = z.object({
     filial: z.string().min(1, "Filial é obrigatória"),
     startDate: z.string().min(1, "Data de início é obrigatória"),
     endDate: z.string().optional(),
-    salary: z.string().min(1, "Salário é obrigatório"),
+    salary: z.string().optional(),
     VC: z.string().optional(),
     VT: z.string().optional(),
     VR: z.string().optional(),
@@ -212,7 +212,7 @@ export function EmployeeModal({ open, onClose, employee }: EmployeeModalProps) {
                 endDate: data.endDate
                     ? new Date(data.endDate).toISOString()
                     : new Date().toISOString(),
-                salary: Number.parseFloat(data.salary) || 0,
+                salary: Number.parseFloat(data.salary ?? "0") || 0,
                 VC: parseDecimalString(formatCurrencyInput(data.VC ?? "")),
                 VT: parseDecimalString(formatCurrencyInput(data.VT ?? "")),
                 VR: parseDecimalString(formatCurrencyInput(data.VR ?? "")),
@@ -477,7 +477,7 @@ export function EmployeeModal({ open, onClose, employee }: EmployeeModalProps) {
                                                     type="text"
                                                     placeholder="R$ 0,00"
                                                     value={formatCurrency(
-                                                        field.value
+                                                        field.value ?? '0'
                                                     )}
                                                     onChange={(e) => {
                                                         const inputValue =
