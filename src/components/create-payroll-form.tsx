@@ -48,8 +48,8 @@ const formSchema = z.object({
         .number()
         .min(0, "Deve ser maior ou igual a 0")
         .max(31, "Máximo de 31 dias"),
-    gratification: z.coerce.number().min(0, "Deve ser maior ou igual a 0"),
-    discount: z.coerce.number().min(0, "Deve ser maior ou igual a 0"),
+    gratification: z.string().min(0, "Deve ser maior ou igual a 0"),
+    discount: z.string().min(0, "Deve ser maior ou igual a 0"),
     paymentDate: z.date().nullable(),
 });
 
@@ -62,6 +62,11 @@ function formatCurrencyInput(value: string): string {
 
 function parseDecimalString(value: string): number {
     if (!value) return 0;
+    // Se o valor já é um número (sem formatação), retorna diretamente
+    if (!isNaN(Number(value))) {
+        return Number(value);
+    }
+    // Se tem formatação de moeda, converte
     return Number.parseFloat(value.replace(",", ".")) || 0;
 }
 
@@ -81,8 +86,8 @@ export function CreatePayrollForm({
             quantityVT: 0,
             quantityVC: 0,
             quantityDayWork: 20,
-            gratification: 0,
-            discount: 0,
+            gratification: "",
+            discount: "",
             paymentDate: null,
         },
     });
@@ -104,10 +109,8 @@ export function CreatePayrollForm({
                 quantityVT: values.quantityVT,
                 quantityVC: values.quantityVC,
                 quantityDayWork: values.quantityDayWork,
-                gratification: values.gratification,
-                discount: parseDecimalString(
-                    formatCurrencyInput(values.discount?.toString() ?? "")
-                ),
+                gratification: parseDecimalString(values.gratification),
+                discount: parseDecimalString(values.discount),
                 paymentDate,
                 createdDate,
             });
@@ -172,16 +175,18 @@ export function CreatePayrollForm({
                                 <FormLabel>Gratificação (R$)</FormLabel>
                                 <FormControl>
                                     <Input
-                                        type="number"
-                                        min={0}
-                                        {...field}
-                                        onChange={(e) =>
-                                            field.onChange(
-                                                e.target.value === ""
-                                                    ? 0
-                                                    : Number(e.target.value)
-                                            )
-                                        }
+                                        type="text"
+                                        placeholder="R$ 0,00"
+                                        value={`R$ ${formatCurrencyInput(
+                                            field.value?.toString() ?? ""
+                                        )}`}
+                                        onChange={(e) => {
+                                            const raw = e.target.value.replace(
+                                                /\D/g,
+                                                ""
+                                            );
+                                            field.onChange(raw);
+                                        }}
                                     />
                                 </FormControl>
                                 <FormMessage />

@@ -54,6 +54,23 @@ interface EditPayrollFormProps {
     year: number;
 }
 
+function formatCurrencyInput(value: string): string {
+    const numeric = value.replace(/\D/g, "");
+    if (!numeric) return "";
+    const number = (parseInt(numeric, 10) / 100).toFixed(2);
+    return number.replace(".", ",");
+}
+
+function parseDecimalString(value: string): number {
+    if (!value) return 0;
+    // Se o valor já é um número (sem formatação), retorna diretamente
+    if (!isNaN(Number(value))) {
+        return Number(value);
+    }
+    // Se tem formatação de moeda, converte
+    return Number.parseFloat(value.replace(",", ".")) || 0;
+}
+
 const formSchema = z.object({
     quantityVR: z.coerce.number().min(0, "Deve ser maior ou igual a 0"),
     quantityVT: z.coerce.number().min(0, "Deve ser maior ou igual a 0"),
@@ -62,8 +79,8 @@ const formSchema = z.object({
         .number()
         .min(0, "Deve ser maior ou igual a 0")
         .max(31, "Máximo de 31 dias"),
-    gratification: z.coerce.number().min(0, "Deve ser maior ou igual a 0"),
-    discount: z.coerce.number().min(0, "Deve ser maior ou igual a 0"),
+    gratification: z.string().min(0, "Deve ser maior ou igual a 0"),
+    discount: z.string().min(0, "Deve ser maior ou igual a 0"),
     paymentDate: z.date().nullable(),
     paidAt: z.date().nullable(),
 });
@@ -90,8 +107,8 @@ export function EditPayrollForm({
             quantityVT: payroll.quantityVT,
             quantityVC: payroll.quantityVC,
             quantityDayWork: payroll.quantityDayWork,
-            gratification: payroll.gratification,
-            discount: payroll.discount,
+            gratification: payroll.gratification.toString(),
+            discount: payroll.discount.toString(),
             paymentDate: paymentDate,
             paidAt: paidAt,
         },
@@ -114,8 +131,8 @@ export function EditPayrollForm({
                 quantityVT: values.quantityVT,
                 quantityVC: values.quantityVC,
                 quantityDayWork: values.quantityDayWork,
-                gratification: values.gratification,
-                discount: values.discount,
+                gratification: parseDecimalString(values.gratification),
+                discount: parseDecimalString(values.discount),
                 paidAt,
                 paymentDate,
             });
@@ -169,9 +186,18 @@ export function EditPayrollForm({
                                 <FormLabel>Gratificação (R$)</FormLabel>
                                 <FormControl>
                                     <Input
-                                        type="number"
+                                        type="text"
                                         placeholder="R$ 0,00"
-                                        {...field}
+                                        value={`R$ ${formatCurrencyInput(
+                                            field.value?.toString() ?? ""
+                                        )}`}
+                                        onChange={(e) => {
+                                            const raw = e.target.value.replace(
+                                                /\D/g,
+                                                ""
+                                            );
+                                            field.onChange(raw);
+                                        }}
                                     />
                                 </FormControl>
                                 <FormMessage />
@@ -241,7 +267,20 @@ export function EditPayrollForm({
                             <FormItem>
                                 <FormLabel>Desconto</FormLabel>
                                 <FormControl>
-                                    <Input type="number" {...field} />
+                                    <Input
+                                        type="text"
+                                        placeholder="R$ 0,00"
+                                        value={`R$ ${formatCurrencyInput(
+                                            field.value?.toString() ?? ""
+                                        )}`}
+                                        onChange={(e) => {
+                                            const raw = e.target.value.replace(
+                                                /\D/g,
+                                                ""
+                                            );
+                                            field.onChange(raw);
+                                        }}
+                                    />
                                 </FormControl>
                                 <FormMessage />
                             </FormItem>
