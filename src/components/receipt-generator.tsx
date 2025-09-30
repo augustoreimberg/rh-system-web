@@ -86,7 +86,7 @@ export function generateReceipt({
   doc.setFontSize(13);
   doc.text("DEMONSTRATIVO DE PAGAMENTO", 105, y, { align: "center" });
 
-  const dataAtual = new Date();
+  const dataAtual = new Date(payroll.paymentDate);
   const dataStr = dataAtual.toLocaleDateString("pt-BR", {
     weekday: "long",
     year: "numeric",
