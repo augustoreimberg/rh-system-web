@@ -86,7 +86,7 @@ export function generateReceipt({
   doc.setFontSize(13);
   doc.text("DEMONSTRATIVO DE PAGAMENTO", 105, y, { align: "center" });
 
-  const dataAtual = new Date();
+  const dataAtual = new Date(payroll.paymentDate);
   const dataStr = dataAtual.toLocaleDateString("pt-BR", {
     weekday: "long",
     year: "numeric",
@@ -116,7 +116,7 @@ export function generateReceipt({
   doc.text(
     "Av. Augusto Barbosa Tavares, 320 - SL 08 - JD Maria Sampaio - SP",
     marginLeft + 30,
-    y
+    y,
   );
   y += 10;
 
@@ -228,7 +228,7 @@ export function generateReceipt({
   doc.text(
     dataAtual.toLocaleTimeString("pt-BR", { hour12: false }),
     marginLeft,
-    287
+    287,
   );
   doc.text("Página 1 de 1", 105, 287, { align: "center" });
 
